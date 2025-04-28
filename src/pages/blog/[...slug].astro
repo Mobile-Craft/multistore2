@@ -3,20 +3,21 @@ import { type CollectionEntry, getCollection } from "astro:content";
 import BlogPost from "../../layouts/BlogPost.astro";
 import { render } from "astro:content";
 
-(async () => {
-	try {
-		const res = await fetch(
-			"https://showby.marcospd.ninja/catalog/tech-world",
-		);
-		if (!res.ok) {
-			throw new Error("No se encontró la tienda");
-		}
-		const storeData = await res.json();
-		console.log("Respuesta de la API:", storeData);
-	} catch (err) {
-		console.error(err);
+let storeName = "";
+
+try {
+	const res = await fetch("https://showby.marcospd.ninja/catalog/tech-world");
+	if (!res.ok) {
+		throw new Error("No se encontró la tienda");
 	}
-})();
+	const storeData: { name: string } = await res.json();
+	console.log("Respuesta de la API:", storeData);
+
+	// Asignamos el name
+	storeName = storeData.name;
+} catch (err) {
+	console.error(err);
+}
 
 export async function getStaticPaths() {
 	const posts = await getCollection("blog");
@@ -32,5 +33,6 @@ const { Content } = await render(post);
 ---
 
 <BlogPost {...post.data}>
+	<h1>Nombre de la tienda: {storeName}</h1>
 	<Content />
 </BlogPost>
