@@ -2,9 +2,8 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import BlogPost from "../../layouts/BlogPost.astro";
 import { render } from "astro:content";
-import { onMount } from "astro/client";
 
-onMount(async () => {
+(async () => {
 	try {
 		const res = await fetch(
 			"https://showby.marcospd.ninja/catalog/tech-world",
@@ -17,7 +16,7 @@ onMount(async () => {
 	} catch (err) {
 		console.error(err);
 	}
-});
+})();
 
 export async function getStaticPaths() {
 	const posts = await getCollection("blog");
